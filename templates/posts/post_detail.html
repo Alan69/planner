@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Детали поста - Планировщик публикаций{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Детали поста</h2>
+        <p class="text-muted">Просмотр и управление постом</p>
+    </div>
+    <div class="col-md-4 text-end">
+        {% if post.status != 'published' %}
+            <a href="{% url 'post_edit' post.id %}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Редактировать
+            </a>
+        {% endif %}
+        <a href="{% url 'post_delete' post.id %}" class="btn btn-danger">
+            <i class="fas fa-trash"></i> Удалить
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <!-- Post Content -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Содержание поста</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-4">{{ post.content }}</p>
+                
+                {% if post.media_attachments.exists %}
+                    <h6>Медиа файлы:</h6>
+                    <div class="row">
+                        {% for media in post.media_attachments.all %}
+                            <div class="col-md-4 mb-3">
+                                {% if media.media_type == 'image' %}
+                                    <img src="{{ media.file.url }}" class="img-fluid rounded" alt="Медиа поста">
+                                {% else %}
+                                    <video src="{{ media.file.url }}" class="img-fluid rounded" controls></video>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Post Analytics -->
+        {% if post.status == 'published' %}
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Performance Analytics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for analytics in post.postanalytics_set.all %}
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fab fa-{{ analytics.social_account.platform }} me-2"></i>
+                                        {{ analytics.social_account.platform|title }}
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <h6 class="text-muted">Likes</h6>
+                                                <h4>{{ analytics.likes }}</h4>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <h6 class="text-muted">Comments</h6>
+                                                <h4>{{ analytics.comments }}</h4>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <h6 class="text-muted">Shares</h6>
+                                                <h4>{{ analytics.shares }}</h4>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <h6 class="text-muted">Engagement Rate</h6>
+                                                <h4>{{ analytics.engagement_rate|floatformat:2 }}%</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <!-- Post Details -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Информация о посте</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Статус:</strong> 
+                    <span class="badge {% if post.status == 'published' %}bg-success{% elif post.status == 'scheduled' %}bg-primary{% elif post.status == 'failed' %}bg-danger{% else %}bg-secondary{% endif %}">
+                        {% if post.status == 'published' %}Опубликовано
+                        {% elif post.status == 'scheduled' %}Запланировано
+                        {% elif post.status == 'failed' %}Ошибка
+                        {% else %}Черновик{% endif %}
+                    </span>
+                </p>
+                <p><strong>Запланировано на:</strong><br>
+                    {{ post.scheduled_time|date:"d.m.Y H:i" }}
+                </p>
+                {% if post.published_at %}
+                    <p><strong>Опубликовано:</strong><br>
+                        {{ post.published_at|date:"d.m.Y H:i" }}
+                    </p>
+                {% endif %}
+                <p><strong>Создано:</strong><br>
+                    {{ post.created_at|date:"d.m.Y H:i" }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Social Accounts -->
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Целевые платформы</h5>
+            </div>
+            <div class="card-body">
+                {% for account in post.social_accounts.all %}
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fab fa-{{ account.platform }} fa-2x me-3"></i>
+                        <div>
+                            <h6 class="mb-0">{{ account.account_name }}</h6>
+                            <small class="text-muted">{{ account.platform|title }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

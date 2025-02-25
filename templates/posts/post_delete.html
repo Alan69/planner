@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление поста - Планировщик публикаций{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Удаление поста</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-4">Вы уверены, что хотите удалить этот пост?</p>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h6>Содержание поста:</h6>
+                        <p>{{ post.content|truncatechars:200 }}</p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted">Статус: 
+                                    <span class="badge {% if post.status == 'published' %}bg-success{% elif post.status == 'scheduled' %}bg-primary{% else %}bg-secondary{% endif %}">
+                                        {% if post.status == 'published' %}Опубликовано
+                                        {% elif post.status == 'scheduled' %}Запланировано
+                                        {% elif post.status == 'failed' %}Ошибка
+                                        {% else %}Черновик{% endif %}
+                                    </span>
+                                </small>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <small class="text-muted">Запланировано на: {{ post.scheduled_time|date:"d.m.Y H:i" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Это действие нельзя отменить. Все связанные медиафайлы и данные аналитики также будут удалены.
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="text-end">
+                        <a href="{% url 'post_detail' post.id %}" class="btn btn-secondary">Отмена</a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Удалить пост
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Аналитика поста" %} - {{ post.content|truncatechars:50 }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">{% trans "Аналитика поста" %}</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Детали поста" %}</h5>
+            <p class="card-text">{{ post.content }}</p>
+            <p class="text-muted">
+                {% trans "Опубликовано" %}: {{ post.published_at|date:"F j, Y, H:i" }}
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Всего лайков" %}</h5>
+                    <p class="card-text display-4">{{ total_likes }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Всего комментариев" %}</h5>
+                    <p class="card-text display-4">{{ total_comments }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Всего репостов" %}</h5>
+                    <p class="card-text display-4">{{ total_shares }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Уровень вовлеченности" %}</h5>
+                    <p class="card-text display-4">{{ avg_engagement_rate|floatformat:2 }}%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Статистика по платформам" %}</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Платформа" %}</th>
+                            <th>{% trans "Лайки" %}</th>
+                            <th>{% trans "Комментарии" %}</th>
+                            <th>{% trans "Репосты" %}</th>
+                            <th>{% trans "Показы" %}</th>
+                            <th>{% trans "Уровень вовлеченности" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for analytic in analytics %}
+                        <tr>
+                            <td>{{ analytic.social_account.platform|title }}</td>
+                            <td>{{ analytic.likes }}</td>
+                            <td>{{ analytic.comments }}</td>
+                            <td>{{ analytic.shares }}</td>
+                            <td>{{ analytic.impressions }}</td>
+                            <td>{{ analytic.engagement_rate|floatformat:2 }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

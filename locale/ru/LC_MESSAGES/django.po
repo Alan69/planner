@@ -1,0 +1,91 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Social Planner\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-14 12:00+0000\n"
+"PO-Revision-Date: 2024-03-14 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: templates/analytics/dashboard.html
+msgid "Analytics Dashboard"
+msgstr "Панель аналитики"
+
+msgid "Total Posts"
+msgstr "Всего постов"
+
+msgid "Total Likes"
+msgstr "Всего лайков"
+
+msgid "Total Comments"
+msgstr "Всего комментариев"
+
+msgid "Total Shares"
+msgstr "Всего репостов"
+
+msgid "Total Impressions"
+msgstr "Всего показов"
+
+msgid "Average Engagement Rate"
+msgstr "Средний уровень вовлеченности"
+
+msgid "Last 24 Hours"
+msgstr "Последние 24 часа"
+
+msgid "Last 7 Days"
+msgstr "Последние 7 дней"
+
+msgid "Last 30 Days"
+msgstr "Последние 30 дней"
+
+msgid "LinkedIn Analytics"
+msgstr "Аналитика LinkedIn"
+
+#: templates/posts/post_list.html
+msgid "Create Post"
+msgstr "Создать пост"
+
+msgid "Schedule Post"
+msgstr "Запланировать пост"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Scheduled Time"
+msgstr "Запланированное время"
+
+msgid "Published At"
+msgstr "Опубликовано"
+
+#: templates/base.html
+msgid "Dashboard"
+msgstr "Панель управления"
+
+msgid "Posts"
+msgstr "Посты"
+
+msgid "Analytics"
+msgstr "Аналитика"
+
+msgid "Profile"
+msgstr "Профиль"
+
+msgid "Logout"
+msgstr "Выйти"
+
+msgid "Login"
+msgstr "Войти"
+
+msgid "Register"
+msgstr "Регистрация" 

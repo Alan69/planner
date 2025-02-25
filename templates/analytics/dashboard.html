@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Панель аналитики" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">{% trans "Панель аналитики" %}</h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Всего постов" %}</h5>
+                    <p class="card-text display-4">{{ total_posts }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Всего лайков" %}</h5>
+                    <p class="card-text display-4">{{ total_likes }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Всего комментариев" %}</h5>
+                    <p class="card-text display-4">{{ total_comments }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Всего репостов" %}</h5>
+                    <p class="card-text display-4">{{ total_shares }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "За последние 24 часа" %}</h5>
+                    <div class="row">
+                        <div class="col">
+                            <p>{% trans "Лайки" %}: {{ analytics_24h.likes|default:0 }}</p>
+                            <p>{% trans "Комментарии" %}: {{ analytics_24h.comments|default:0 }}</p>
+                            <p>{% trans "Репосты" %}: {{ analytics_24h.shares|default:0 }}</p>
+                            <p>{% trans "Уровень вовлеченности" %}: {{ analytics_24h.engagement_rate|floatformat:2 }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "За последние 7 дней" %}</h5>
+                    <div class="row">
+                        <div class="col">
+                            <p>{% trans "Лайки" %}: {{ analytics_7d.likes|default:0 }}</p>
+                            <p>{% trans "Комментарии" %}: {{ analytics_7d.comments|default:0 }}</p>
+                            <p>{% trans "Репосты" %}: {{ analytics_7d.shares|default:0 }}</p>
+                            <p>{% trans "Уровень вовлеченности" %}: {{ analytics_7d.engagement_rate|floatformat:2 }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Аналитика LinkedIn" %}</h5>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>{% trans "Всего постов" %}: {{ linkedin_analytics.total_posts|default:0 }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p>{% trans "Всего лайков" %}: {{ linkedin_analytics.likes|default:0 }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p>{% trans "Всего комментариев" %}: {{ linkedin_analytics.comments|default:0 }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p>{% trans "Всего репостов" %}: {{ linkedin_analytics.shares|default:0 }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>{% trans "Средний уровень вовлеченности" %}: {{ linkedin_analytics.engagement_rate|floatformat:2 }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

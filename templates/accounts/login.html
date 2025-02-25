@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход - Планировщик публикаций{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Вход</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            <input type="{{ field.field.widget.input_type }}" 
+                                   name="{{ field.name }}"
+                                   id="{{ field.id_for_label }}"
+                                   class="form-control {% if field.errors %}is-invalid{% endif %}"
+                                   autocomplete="{% if field.name == 'username' %}username{% elif field.name == 'password' %}current-password{% endif %}"
+                                   {% if field.field.required %}required{% endif %}>
+                            {% if field.errors %}
+                                <div class="invalid-feedback">
+                                    {{ field.errors|join:", " }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100">Войти</button>
+                </form>
+                <hr>
+                <div class="text-center">
+                    <p class="mb-0">Нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Превью возможностей -->
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-calendar-alt fa-2x text-primary mb-3"></i>
+                        <h5>Планирование постов</h5>
+                        <p class="small text-muted">Планируйте и автоматизируйте публикации</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-chart-line fa-2x text-primary mb-3"></i>
+                        <h5>Аналитика</h5>
+                        <p class="small text-muted">Отслеживайте эффективность публикаций</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-share-alt fa-2x text-primary mb-3"></i>
+                        <h5>Несколько платформ</h5>
+                        <p class="small text-muted">Управляйте всеми соцсетями в одном месте</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

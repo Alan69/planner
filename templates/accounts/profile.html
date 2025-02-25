@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль - Планировщик публикаций{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2>Ваш профиль</h2>
+        <p class="text-muted">Управление настройками аккаунта и подпиской</p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Информация о пользователе -->
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Информация об аккаунте</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <i class="fas fa-user-circle fa-5x text-primary"></i>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted">Имя пользователя</label>
+                    <p class="fw-bold mb-0">{{ user.username }}</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted">Email</label>
+                    <p class="fw-bold mb-0">{{ user.email }}</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted">Дата регистрации</label>
+                    <p class="fw-bold mb-0">{{ user.date_joined|date:"j F Y" }}</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted">Статус аккаунта</label>
+                    <p class="fw-bold mb-0">
+                        <span class="badge {% if user.userprofile.is_verified %}bg-success{% else %}bg-warning{% endif %}">
+                            {{ user.userprofile.is_verified|yesno:"Подтвержден,Не подтвержден" }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Статистика аккаунта -->
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Статистика аккаунта</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <h4>{{ user.post_set.count }}</h4>
+                        <small class="text-muted">Посты</small>
+                    </div>
+                    <div class="col-4">
+                        <h4>{{ user.socialaccount_set.count }}</h4>
+                        <small class="text-muted">Аккаунты</small>
+                    </div>
+                    <div class="col-4">
+                        <h4>{{ published_posts }}</h4>
+                        <small class="text-muted">Опубликовано</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Управление подпиской -->
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">План подписки</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        {% for value, label in user.userprofile.SUBSCRIPTION_CHOICES %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 {% if user.userprofile.subscription_plan == value %}border-primary{% endif %}">
+                                    <div class="card-header {% if user.userprofile.subscription_plan == value %}bg-primary text-white{% endif %}">
+                                        <h5 class="mb-0">{{ label }}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled">
+                                            {% if value == 'free' %}
+                                                <li><i class="fas fa-check text-success me-2"></i>2 соцсети</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Базовая аналитика</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Ручная публикация</li>
+                                                <li><i class="fas fa-times text-danger me-2"></i>Автопланирование</li>
+                                                <li><i class="fas fa-times text-danger me-2"></i>Загрузка медиа</li>
+                                            {% elif value == 'pro' %}
+                                                <li><i class="fas fa-check text-success me-2"></i>5 соцсетей</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Расширенная аналитика</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Автопланирование</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Загрузка медиа</li>
+                                                <li><i class="fas fa-times text-danger me-2"></i>API доступ</li>
+                                            {% else %}
+                                                <li><i class="fas fa-check text-success me-2"></i>Без ограничений</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Полная аналитика</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Приоритетное планирование</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>Без ограничений медиа</li>
+                                                <li><i class="fas fa-check text-success me-2"></i>API доступ</li>
+                                            {% endif %}
+                                        </ul>
+                                        <div class="text-center mt-3">
+                                            {% if user.userprofile.subscription_plan == value %}
+                                                <button type="button" class="btn btn-success" disabled>
+                                                    <i class="fas fa-check me-1"></i> Текущий план
+                                                </button>
+                                            {% else %}
+                                                <button type="submit" name="subscription_plan" value="{{ value }}" class="btn btn-primary">
+                                                    Перейти на {{ label }}
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Текущее использование -->
+        <div class="card shadow mt-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Текущее использование</h5>
+            </div>
+            <div class="card-body">
+                <!-- Использование соцсетей -->
+                <h6>Социальные сети</h6>
+                <div class="progress mb-3">
+                    {% with account_count=user.socialaccount_set.count %}
+                        {% if user.userprofile.subscription_plan == 'free' %}
+                            {% with limit=2 %}
+                                <div class="progress-bar {% if account_count >= limit %}bg-danger{% endif %}"
+                                     style="width: {% widthratio account_count limit 100 %}%">
+                                    {{ account_count }}/{{ limit }} аккаунтов
+                                </div>
+                            {% endwith %}
+                        {% elif user.userprofile.subscription_plan == 'pro' %}
+                            {% with limit=5 %}
+                                <div class="progress-bar {% if account_count >= limit %}bg-danger{% endif %}"
+                                     style="width: {% widthratio account_count limit 100 %}%">
+                                    {{ account_count }}/{{ limit }} аккаунтов
+                                </div>
+                            {% endwith %}
+                        {% else %}
+                            <div class="progress-bar" style="width: 100%">
+                                {{ account_count }} аккаунтов (Без ограничений)
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+
+                <!-- Использование постов -->
+                <h6>Посты за месяц</h6>
+                <div class="progress">
+                    {% with post_count=user.post_set.count %}
+                        {% if user.userprofile.subscription_plan == 'free' %}
+                            {% with limit=50 %}
+                                <div class="progress-bar {% if post_count >= limit %}bg-danger{% endif %}"
+                                     style="width: {% widthratio post_count limit 100 %}%">
+                                    {{ post_count }}/{{ limit }} постов
+                                </div>
+                            {% endwith %}
+                        {% elif user.userprofile.subscription_plan == 'pro' %}
+                            {% with limit=200 %}
+                                <div class="progress-bar {% if post_count >= limit %}bg-danger{% endif %}"
+                                     style="width: {% widthratio post_count limit 100 %}%">
+                                    {{ post_count }}/{{ limit }} постов
+                                </div>
+                            {% endwith %}
+                        {% else %}
+                            <div class="progress-bar" style="width: 100%">
+                                {{ post_count }} постов (Без ограничений)
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
