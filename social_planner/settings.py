@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-s@h=2wmpj0nex##u*x!%nrs69*$goraimwr*e)qw%-ld76j-%x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['planner-m664.onrender.com']
 
 
 # Application definition
